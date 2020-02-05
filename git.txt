@@ -1,0 +1,17 @@
+ 2018  git init
+ 2021  git status
+ 2022  git add info.txt
+ 2023  git status
+ 2024  git commit -m "first commit"
+ 2025  git config --global user.email "gregory.dunlap@gmail.com"
+ 2026  git config --global user.name "Celticcow"
+ 2027  git commit -m "first commit"
+ 2028  git remote add origin https://github.com/celticcow/bulkadd3.git
+ 2029  git push -u origin master
+ 2033  git status
+ 2036  git add apifunctions.py 
+ 2037  git add bulkadd.py 
+ 2038  git commit -m "init files"
+ 2039  git push -u origin master
+ 2041  git status
+
