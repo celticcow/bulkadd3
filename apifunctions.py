@@ -1,4 +1,4 @@
-#!/usr/bin/python -W ignore::DeprecationWarning
+#!/usr/bin/python3 -W ignore::DeprecationWarning
 
 import requests
 import json
@@ -8,7 +8,7 @@ import sys
 Collection of Functions to do CheckPoint R80.xx api calls
 
 Created : 08.12.2019 -- gdunlap
-Last Update : 08.22.2018 -- gdunlap
+Last Update : 02.06.2020 -- gdunlap
 
 todo
 
@@ -44,7 +44,7 @@ convert a CIDR 24 to say 255.255.255.0
 """
 def calcDottedNetmask(mask):
     bits = 0
-    for i in xrange(32-mask,32):
+    for i in range(32-mask,32): 
         bits |= (1 << i)
     return "%d.%d.%d.%d" % ((bits & 0xff000000) >> 24, (bits & 0xff0000) >> 16, (bits & 0xff00) >> 8 , (bits & 0xff))
 
