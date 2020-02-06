@@ -1,0 +1,4 @@
+host,1.1.1.1,group11
+host,2.2.2.2,group11
+host,1.1.1.1,group21
+network,1.0.1.0/24,group21
