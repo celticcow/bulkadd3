@@ -13,6 +13,9 @@ import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 """
+gregory.dunlap / celtic_cow
+bulk add script.
+take in csv file in format   (host/network),(ip/subnet+cidr),(group_name)
 """
 
 if __name__ == "__main__":
