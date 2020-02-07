@@ -40,14 +40,25 @@ if __name__ == "__main__":
             row_data = row[1]
             row_grp  = row[2]
 
+            addobj = 1
+
             if(debug ==1):
                 print(row_type, row_data, row_grp)
 
-            if(row_type == "network"):
-                tmp = row_data.split('/')
-                apifunctions.add_a_network_with_group(ip_addr, prefix+tmp[0], tmp[0], apifunctions.calcDottedNetmask(int(tmp[1])), row_grp, sid)
-            if(row_type == "host"):
-                apifunctions.add_a_host_with_group(ip_addr, prefix+row_data, row_data, row_grp, sid)
+            if(apifunctions.group_exist(ip_addr, row_grp, sid) == False):
+                print("Group in row does not exist do you want to create (yes/no) ", row_grp)
+                toadd = input("(yes / no : ")
+                if(toadd == "yes"):
+                    apifunctions.add_a_group(ip_addr, row_grp, sid)
+                else:
+                    addobj = 0
+            if(addobj == 1):
+                #this is a valid group
+                if(row_type == "network"):
+                    tmp = row_data.split('/')
+                    apifunctions.add_a_network_with_group(ip_addr, prefix+tmp[0], tmp[0], apifunctions.calcDottedNetmask(int(tmp[1])), row_grp, sid)
+                if(row_type == "host"):
+                    apifunctions.add_a_host_with_group(ip_addr, prefix+row_data, row_data, row_grp, sid)
 
     ### some times publish doesn't work and sits in dashboard
 

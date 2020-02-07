@@ -79,6 +79,22 @@ def name_exist(ip_addr, name, sid):
         return True
     
 """
+see if group already exist as bool ... could do 
+name_exist but this looks better
+"""
+def group_exist(ip_addr, name, sid):
+    print("temp -- in group_exist")
+    check_name = {"order" : [{"ASC" : "name"}], "in" : ["name", name] }
+    chkname = api_call(ip_addr, "show-objects", check_name, sid)
+
+    if((chkname['total'] == 1) and (chkname['objects'][0]['type'] == "group")):
+        print("This is a group yo")
+        return True
+    #print(json.dumps(chkname))
+    print("not a group or does not exist")
+    return False
+
+"""
 add a new group
 """
 def add_a_group(ip_addr, name, sid):
