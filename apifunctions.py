@@ -361,4 +361,82 @@ def add_a_range_with_group(ip_addr, name, startip, endip, group, sid):
             else:
                 print("object with taht name already exist")
 
+
+"""
+add a tcp service
+"""
+def add_a_tcp_port(ip_addr, port, sid):
+    ## check to see if the port exist already
+    check_service_obj = {"type": "service-tcp", "filter" : port, "limit" : "50"}
+    chkservice = api_call(ip_addr, "show-objects", check_service_obj, sid)
+
+    #print(json.dumps(chkservice))
+    if(chkservice['total'] == 0):
+        #need to add a port .. no match or near match
+        name = "tcp-" + str(port)
+        if(name_exist(ip_addr, name, sid) == False):
+            ## add the port
+            port_to_add = {"name" : name, "port" : port}
+            portadd = api_call(ip_addr, "add-service-tcp", port_to_add, sid)
+        else:
+            print("object with name " + name + " exist already but does not match port number")
+
+    else:
+        #may be a port may not (80 vs 8080)
+        found = 0
+        for i in range(chkservice['total']):
+            #print(chkservice['objects'][i]['port'])
+            if(chkservice['objects'][i]['port'] == port):
+                #found match
+                print("Port Already Found : " + chkservice['objects'][i]['name'])
+                found = 1
+        if(found == 0):
+            #add port
+            name = "tcp-" + str(port)
+            if(name_exist(ip_addr, name, sid) == False):
+                ## add the port
+                port_to_add = {"name" : name, "port" : port}
+                portadd = api_call(ip_addr, "add-service-tcp", port_to_add, sid)
+            else:
+                print("object with name " + name + " exist already but does not match port number")
+
+
+"""
+add a udp service
+"""
+def add_a_udp_port(ip_addr, port, sid):
+    ## check to see if the port exist already
+    check_service_obj = {"type": "service-udp", "filter" : port, "limit" : "50"}
+    chkservice = api_call(ip_addr, "show-objects", check_service_obj, sid)
+
+    #print(json.dumps(chkservice))
+    if(chkservice['total'] == 0):
+        #need to add a port .. no match or near match
+        name = "udp-" + str(port)
+        if(name_exist(ip_addr, name, sid) == False):
+            ## add the port
+            port_to_add = {"name" : name, "port" : port}
+            portadd = api_call(ip_addr, "add-service-udp", port_to_add, sid)
+        else:
+            print("object with name " + name + " exist already but does not match port number")
+
+    else:
+        #may be a port may not (80 vs 8080)
+        found = 0
+        for i in range(chkservice['total']):
+            #print(chkservice['objects'][i]['port'])
+            if(chkservice['objects'][i]['port'] == port):
+                #found match
+                print("Port Already Found : " + chkservice['objects'][i]['name'])
+                found = 1
+        if(found == 0):
+            #add port
+            name = "udp-" + str(port)
+            if(name_exist(ip_addr, name, sid) == False):
+                ## add the port
+                port_to_add = {"name" : name, "port" : port}
+                portadd = api_call(ip_addr, "add-service-udp", port_to_add, sid)
+            else:
+                print("object with name " + name + " exist already but does not match port number")
+
 #end of file

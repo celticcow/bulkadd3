@@ -47,21 +47,43 @@ if __name__ == "__main__":
 
             if(debug ==1):
                 print(row_type, row_data, row_grp)
-
-            if(apifunctions.group_exist(ip_addr, row_grp, sid) == False):
-                print("Group in row does not exist do you want to create (yes/no) ", row_grp)
-                toadd = input("(yes / no : ")
-                if(toadd == "yes"):
-                    apifunctions.add_a_group(ip_addr, row_grp, sid)
+            if(row_type == "service"):
+                #data should be in format of (service,<tcp/udp>,<number>)
+                if(row_data == "tcp"):
+                    apifunctions.add_a_tcp_port(ip_addr,row_grp,sid)
+                if(row_data == "udp"):
+                    apifunctions.add_a_udp_port(ip_addr,row_grp,sid)
+            #end if(type is service)
+            else:
+                if(row_grp == "nogroup"):
+                    ## we're not going to place this in a group
+                    if(row_type == "network"):
+                        tmp = row_data.split('/')
+                        apifunctions.add_a_network(ip_addr, prefix+tmp[0], tmp[0], apifunctions.calcDottedNetmask(int(tmp[1])), sid)
+                    if(row_type == "host"):
+                        apifunctions.add_a_host(ip_addr, prefix+row_data, row_data, sid)
                 else:
-                    addobj = 0
-            if(addobj == 1):
-                #this is a valid group
-                if(row_type == "network"):
-                    tmp = row_data.split('/')
-                    apifunctions.add_a_network_with_group(ip_addr, prefix+tmp[0], tmp[0], apifunctions.calcDottedNetmask(int(tmp[1])), row_grp, sid)
-                if(row_type == "host"):
-                    apifunctions.add_a_host_with_group(ip_addr, prefix+row_data, row_data, row_grp, sid)
+                    ## we doing some group stuff
+                    if(apifunctions.group_exist(ip_addr, row_grp, sid) == False):
+                        print("Group in row does not exist do you want to create (yes/no) if you say no this line will be skipped ", row_grp)
+                        toadd = input("(yes / no) : ")
+                        if(toadd == "yes"):
+                            apifunctions.add_a_group(ip_addr, row_grp, sid)
+                        else:
+                            addobj = 0
+
+                    if(addobj == 1):
+                        #this is a valid group
+                        if(row_type == "network"):
+                            tmp = row_data.split('/')
+                            apifunctions.add_a_network_with_group(ip_addr, prefix+tmp[0], tmp[0], apifunctions.calcDottedNetmask(int(tmp[1])), row_grp, sid)
+                        if(row_type == "host"):
+                            apifunctions.add_a_host_with_group(ip_addr, prefix+row_data, row_data, row_grp, sid)
+                #end if(grp = nogroup)
+            #end else --- network object
+        #end for row in csvreader
+    #end with open
+
 
     ### some times publish doesn't work and sits in dashboard
 
