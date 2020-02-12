@@ -86,11 +86,26 @@ def group_exist(ip_addr, name, sid):
     print("temp -- in group_exist")
     check_name = {"order" : [{"ASC" : "name"}], "in" : ["name", name] }
     chkname = api_call(ip_addr, "show-objects", check_name, sid)
+    
+    print("************* Group Exist JDump *************")
+    print(json.dumps(chkname))
+    print("************* ----------------- *************")
 
-    if((chkname['total'] == 1) and (chkname['objects'][0]['type'] == "group")):
-        print("This is a group yo")
-        return True
-    #print(json.dumps(chkname))
+    if(chkname['total'] == 0):
+        #nothing found with this name space
+        print("not a group or does not exist")
+        return False
+    """
+     possible to get a group named "test99" and a host with prefix
+     test99- that will both match on the show object so we can't just
+     assume the index of [0] in the search for type will be 100% effective
+    """
+    for i in range(chkname['total']):
+        if(chkname['objects'][i]['type'] == "group"):
+            print("This is a group yo")
+            return True
+    
+    #default return case.  we had name matches but none were groups
     print("not a group or does not exist")
     return False
 
