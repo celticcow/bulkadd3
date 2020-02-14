@@ -19,11 +19,66 @@ take in csv file in format   (host/network),(ip/subnet+cidr),(group_name)
                              (service),(tcp/udp),(port num)
 """
 
+
+def csvisgood(ifile):
+    with open(ifile, newline='') as csvfile:
+        csvreader = csv.reader(csvfile, delimiter=',', quotechar='|')
+        for row in csvreader:
+            row_type = row[0]
+            row_data = row[1]
+            row_grp  = row[2]            
+
+            if(debug ==1):
+                print(row_type, row_data, row_grp)
+            try:
+                if(rowisclean(row_type, row_data, row_grp)):
+                    print("ROW IS CLEAN")
+                else:
+                    print("ROW IS INVALID")
+                    return False
+            except:
+                print("ROW IS INVALID")
+                return False
+    return True
+
+
+def rowisclean(ctype, cdata, cgrp):
+    if(ctype == "host"):
+        if(ipaddress.ip_address(cdata)):
+                print("valid ip")
+        else:
+            return False
+    elif(ctype == "network"):
+        if(ipaddress.ip_network(cdata)):
+            print("valid network")
+        else:
+            return False
+    elif(ctype == "service"):
+        if((cdata == "tcp") or (cdata == "udp")):
+            tmpnum = int(cgrp)
+            if((tmpnum <= 65535) and (tmpnum >= 1)):
+                print("valid port")
+            else:
+                return False
+        else:
+            return False
+    else:
+        print("things have gone sideways on your csv")
+        return False
+    return True
+
 if __name__ == "__main__":
     
     debug = 1
 
     inputfile = sys.argv[1]
+
+    print("CheckPoint BulkAdd3  version 0.8")
+
+    #before we login to the mds ... make sure input file is good
+    if(csvisgood(inputfile) == False):
+        print("input CSV is malformed.")
+        exit(1)
 
     ip_addr = input("enter IP of MDS : ")
     ip_cma  = input("enter IP of CMA : ")
