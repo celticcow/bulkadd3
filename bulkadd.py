@@ -6,6 +6,7 @@ import sys
 import csv
 import time
 import getpass
+import ipaddress
 import apifunctions
 
 #remove the InsecureRequestWarning messages
@@ -28,16 +29,19 @@ def csvisgood(ifile):
             row_data = row[1]
             row_grp  = row[2]            
 
-            if(debug ==1):
-                print(row_type, row_data, row_grp)
+            #if(debug == 1):
+                #print(row_type, row_data, row_grp)
             try:
                 if(rowisclean(row_type, row_data, row_grp)):
-                    print("ROW IS CLEAN")
+                    pass
+                    #print("ROW IS CLEAN")
                 else:
                     print("ROW IS INVALID")
+                    print(row_type, row_data, row_grp)
                     return False
             except:
                 print("ROW IS INVALID")
+                print(row_type, row_data, row_grp)
                 return False
     return True
 
@@ -45,19 +49,22 @@ def csvisgood(ifile):
 def rowisclean(ctype, cdata, cgrp):
     if(ctype == "host"):
         if(ipaddress.ip_address(cdata)):
-                print("valid ip")
+            pass
+            #print("valid ip")
         else:
             return False
     elif(ctype == "network"):
         if(ipaddress.ip_network(cdata)):
-            print("valid network")
+            pass
+            #print("valid network")
         else:
             return False
     elif(ctype == "service"):
         if((cdata == "tcp") or (cdata == "udp")):
             tmpnum = int(cgrp)
             if((tmpnum <= 65535) and (tmpnum >= 1)):
-                print("valid port")
+                pass
+                #print("valid port")
             else:
                 return False
         else:
@@ -72,8 +79,8 @@ if __name__ == "__main__":
     debug = 1
 
     inputfile = sys.argv[1]
-
-    print("CheckPoint BulkAdd3  version 0.8")
+    
+    print("CheckPoint BulkAdd3  version 0.82")
 
     #before we login to the mds ... make sure input file is good
     if(csvisgood(inputfile) == False):
