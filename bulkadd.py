@@ -69,6 +69,8 @@ def rowisclean(ctype, cdata, cgrp):
                 return False
         else:
             return False
+    elif(ctype == "group"):
+        pass
     else:
         print("things have gone sideways on your csv")
         return False
@@ -80,7 +82,7 @@ if __name__ == "__main__":
 
     inputfile = sys.argv[1]
     
-    print("CheckPoint BulkAdd3  version 0.82")
+    print("CheckPoint BulkAdd3  version 0.84")
 
     #before we login to the mds ... make sure input file is good
     if(csvisgood(inputfile) == False):
@@ -116,7 +118,29 @@ if __name__ == "__main__":
                     apifunctions.add_a_tcp_port(ip_addr,row_grp,sid)
                 if(row_data == "udp"):
                     apifunctions.add_a_udp_port(ip_addr,row_grp,sid)
-            #end if(type is service)
+            elif(row_type == "group"):
+                # row_data will have group, row_grp will have group we want to add into
+                # add row_data group as a member to row_grp
+                movefwd = 1
+                if(apifunctions.group_exist(ip_addr, row_data, sid) == False):
+                    print("Source Group does not exist. Do you want to create (yes/no). If you say No this line will be slipped ", row_data)
+                    toadd = input("(yes/no) : ")
+                    if(toadd == "yes"):
+                        apifunctions.add_a_group(ip_addr, row_data, sid)
+                    else:
+                        movefwd = 0
+                if(apifunctions.group_exist(ip_addr, row_grp, sid) == False):
+                    print("Source Group does not exist. Do you want to create (yes/no). If you say No this line will be slipped ", row_grp)
+                    toadd = input("(yes/no) : ")
+                    if(toadd == "yes"):
+                        apifunctions.add_a_group(ip_addr, row_grp, sid)
+                    else:
+                        movefwd = 0
+
+                if(movefwd == 1):
+                    #either both groups existed or we created both ... either way lets do this
+                    apifunctions.add_group_to_group(ip_addr, row_data, row_grp, sid)
+            # end elif group
             else:
                 if(row_grp == "nogroup"):
                     ## we're not going to place this in a group

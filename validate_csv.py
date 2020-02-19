@@ -52,6 +52,8 @@ def rowisclean(ctype, cdata, cgrp):
                 return False
         else:
             return False
+    elif(ctype == "group"):
+        pass
     else:
         print("things have gone sideways on your csv")
         return False
