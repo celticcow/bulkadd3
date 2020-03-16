@@ -10,6 +10,8 @@ Collection of Functions to do CheckPoint R80.xx api calls
 Created : 08.12.2019 -- gdunlap
 Last Update : 02.06.2020 -- gdunlap
 
+version 1.1
+
 todo
 
 """
