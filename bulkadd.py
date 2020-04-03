@@ -76,13 +76,13 @@ def rowisclean(ctype, cdata, cgrp):
         return False
     return True
 
-if __name__ == "__main__":
+def main():
     
     debug = 1
 
     inputfile = sys.argv[1]
     
-    print("CheckPoint BulkAdd3  version 0.84")
+    print("CheckPoint BulkAdd3  version 0.85")
 
     #before we login to the mds ... make sure input file is good
     if(csvisgood(inputfile) == False):
@@ -187,3 +187,6 @@ if __name__ == "__main__":
     if(debug == 1):
         print(logout_result)
 #endof main()
+
+if __name__ == "__main__":
+    main()
