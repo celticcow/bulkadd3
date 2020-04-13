@@ -27,3 +27,16 @@ Version 0.8:
 
 bug list:
 
+
+--------------------
+Web Version:
+
+bulk.html :
+todo : need prefix dialog box
+	test with more use cases
+	promote up to prod
+
+bulk.py :
+	add in more test cases
+	error checking
+	output formatting
