@@ -75,13 +75,34 @@ def main():
 
     #create instance of field storage
     form = cgi.FieldStorage()
-    cma_base = form.getvalue('dcma')
+    cma_base = form.getvalue('cma')
+    userid = form.getvalue('user')
+    passwd = form.getvalue('password')
 
     #dcma_map = {
     #    'adm25' : '146.18.96.25',
     #    'adm26' : '146.18.96.26',
     #    'adm27' : '146.18.96.27'
     #}
+
+    cma_map = {
+        'adm1'  : {'cma' : '192.168.159.151', 'mds' : '192.168.159.150'},
+        'adm2'  : {'cma' : '204.135.121.152', 'mds' : '204.135.121.150'},
+        'adm3'  : {'cma' : '204.135.121.153', 'mds' : '204.135.121.150'},
+        'adm5'  : {'cma' : '192.168.159.155', 'mds' : '192.168.159.150'},
+        'adm6'  : {'cma' : '204.135.121.156', 'mds' : '204.135.121.150'},
+        'adm7'  : {'cma' : '204.135.121.157', 'mds' : '204.135.121.150'},
+        'adm8'  : {'cma' : '204.135.121.158', 'mds' : '204.135.121.150'},
+        'adm10' : {'cma' : '192.168.159.160', 'mds' : '192.168.159.150'},
+        'adm11' : {'cma' : '192.168.159.161', 'mds' : '192.168.159.150'},
+        'adm12' : {'cma' : '192.168.159.162', 'mds' : '192.168.159.150'},
+        'adm13' : {'cma' : '192.168.159.163', 'mds' : '192.168.159.150'},
+        'adm14' : {'cma' : '204.135.121.164', 'mds' : '204.135.121.150'},
+        'adm17' : {'cma' : '192.168.159.167', 'mds' : '192.168.159.150'},
+        'adm19' : {'cma' : '192.168.159.169', 'mds' : '192.168.159.150'},
+        'adm24' : {'cma' : '204.135.121.174', 'mds' : '204.135.121.150'},
+    }
+
     dcma_map = {
         'adm25' : {'cma' : '146.18.96.25', 'mds' : '146.18.96.16'},
         'adm26' : {'cma' : '146.18.96.26', 'mds' : '146.18.96.16'},
@@ -90,8 +111,8 @@ def main():
     #print(cma_map['adm27']['cma'])
     #print(cma_map['adm27']['mds'])
 
-    mds_ip = dcma_map[cma_base]['mds']
-    cma_ip = dcma_map[cma_base]['cma']
+    mds_ip = cma_map[cma_base]['mds']
+    cma_ip = cma_map[cma_base]['cma']
 
     ## html header and config data dump
     print ("Content-type:text/html\r\n\r\n")
@@ -104,10 +125,10 @@ def main():
 
     print(cma_ip + "<br>")
 
-    print(dcma_map[cma_base])
+    print(cma_map[cma_base])
     print("<br>")
 
-    sid = apifunctions.login("gdunlap", "1qazxsw2", mds_ip, cma_ip)  
+    sid = apifunctions.login(userid, passwd, mds_ip, cma_ip)  
 
     if(debug == 1):
         print("session id : " + sid + "<br>")

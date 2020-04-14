@@ -7,10 +7,13 @@
         <br>
         <form method="get" action="../cgi-bin/bulk3.py" id="form1">
         
-            CREDS HERE
+            Provider1 Creds:<br>
+            UserID: <input id='user' type="text" size="20" maxlength="20" name="user"><br>
+            Passwd: <input id='password' type="password" size="20" maxlength="20" name="password"><br>
+
             <br>
             <br>
-            <select id="cma" name="cma">
+            <select id="cma" name="cma" onchange="check()">
                 <option value='0'>--Select--</option>
                 <option value='adm1'>Services-US-Main(adm1)</option>
                 <option value='adm2'>Services-US-EmployeeAccess(adm2)</option>
@@ -29,7 +32,7 @@
                 <option value='adm24'>Genco-US-Main (adm24)</option>
             </select>
             <br>
-            <select id="dcma" name="dcma" onchange="check()">
+            <select id="dcma" name="dcma">
                 <option value='0'>--Select--</option>
                 <option value='adm25'>TestCMA</option>
                 <option value='adm26'>Dev-CMA</option>
@@ -53,19 +56,23 @@
         <script>
             function check()
             {
-                switch(document.getElementById('dcma').value)
+                switch(document.getElementById('cma').value)
                 {
-                    case 'adm25': 
-                        document.getElementById('group').disabled=false;
-                        document.getElementById('objects').disabled=false;
-                        document.getElementById('prefix').disabled=false;
-                        break;
-                    case 'adm26': 
-                        document.getElementById('group').disabled=false;
-                        document.getElementById('objects').disabled=false;
-                        document.getElementById('prefix').disabled=false;
-                        break;
-                    case 'adm27': 
+                    case 'adm1': 
+                    case 'adm2': 
+                    case 'adm3': 
+                    case 'adm5': 
+                    case 'adm6': 
+                    case 'adm7': 
+                    case 'adm8': 
+                    case 'adm10': 
+                    case 'adm11': 
+                    case 'adm12': 
+                    case 'adm13': 
+                    case 'adm14': 
+                    case 'adm17': 
+                    case 'adm19': 
+                    case 'adm24': 
                         document.getElementById('group').disabled=false;
                         document.getElementById('objects').disabled=false;
                         document.getElementById('prefix').disabled=false;
