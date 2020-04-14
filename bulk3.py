@@ -75,15 +75,23 @@ def main():
 
     #create instance of field storage
     form = cgi.FieldStorage()
-    cma_action_on = form.getvalue('dcma')
+    cma_base = form.getvalue('dcma')
 
+    #dcma_map = {
+    #    'adm25' : '146.18.96.25',
+    #    'adm26' : '146.18.96.26',
+    #    'adm27' : '146.18.96.27'
+    #}
     dcma_map = {
-        'adm25' : '146.18.96.25',
-        'adm26' : '146.18.96.26',
-        'adm27' : '146.18.96.27'
+        'adm25' : {'cma' : '146.18.96.25', 'mds' : '146.18.96.16'},
+        'adm26' : {'cma' : '146.18.96.26', 'mds' : '146.18.96.16'},
+        'adm27' : {'cma' : '146.18.96.27', 'mds' : '146.18.96.16'},
     }
+    #print(cma_map['adm27']['cma'])
+    #print(cma_map['adm27']['mds'])
 
-    mds_ip = "146.18.96.16" ## need to make this fluid later
+    mds_ip = dcma_map[cma_base]['mds']
+    cma_ip = dcma_map[cma_base]['cma']
 
     ## html header and config data dump
     print ("Content-type:text/html\r\n\r\n")
@@ -94,18 +102,20 @@ def main():
     print ("<body>")
     print("Bulk Add<br><br>")
 
-    print(cma_action_on + "<br>")
+    print(cma_ip + "<br>")
 
-    print(dcma_map[cma_action_on])
+    print(dcma_map[cma_base])
     print("<br>")
 
-    sid = apifunctions.login("gdunlap", "1qazxsw2", mds_ip, dcma_map[cma_action_on])  # change to cma_map 
+    sid = apifunctions.login("gdunlap", "1qazxsw2", mds_ip, cma_ip)  
 
     if(debug == 1):
         print("session id : " + sid + "<br>")
     
     group_to_use     = form.getvalue('group')
     objects_raw      = form.getvalue('objects')
+    prefix           = form.getvalue('prefix')
+
     objects_s1 = str(objects_raw) # odd i know but ya got to
     objects_s2 = objects_s1.split(' ')
     objects_s3 = objects_s2[0].split()
@@ -138,10 +148,10 @@ def main():
         print("-----<br>")
 
         if(obj_type == "host"):
-            add_host(obj, group_to_use, mds_ip, "test3-", sid) 
+            add_host(obj, group_to_use, mds_ip, prefix, sid) 
         if(obj_type == "network"):
             parts = obj.split('/')
-            add_network(parts[0], parts[1], group_to_use, mds_ip, "test3-", sid) 
+            add_network(parts[0], parts[1], group_to_use, mds_ip, prefix, sid) 
 
         #print(objects_raw)
 

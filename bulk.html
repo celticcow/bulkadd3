@@ -38,8 +38,11 @@
 
             <br>
             Group to add to (leave as NOGROUP to not add to group). If group does not exist it will be created and objects added<br>
+            If there is object named the same as this (that is not a group) this will NOT create a group <br>
             <input id='group' type='text' size='50' maxsize='50' name='group' placeholder='NOGROUP' disabled=true><br>
             <br>
+            Prefix (don't forget the -) <br>
+            <input id='prefix' type='text' size='20' maxsize='50' name='prefix' disabled=true><br>
             Enter IP/Networks<br>
             <textarea id='objects' type='text' cols="31" rows="50" name='objects' disabled=true></textarea>
             <br><br>
@@ -55,18 +58,22 @@
                     case 'adm25': 
                         document.getElementById('group').disabled=false;
                         document.getElementById('objects').disabled=false;
+                        document.getElementById('prefix').disabled=false;
                         break;
                     case 'adm26': 
                         document.getElementById('group').disabled=false;
                         document.getElementById('objects').disabled=false;
+                        document.getElementById('prefix').disabled=false;
                         break;
                     case 'adm27': 
                         document.getElementById('group').disabled=false;
                         document.getElementById('objects').disabled=false;
+                        document.getElementById('prefix').disabled=false;
                         break;
                     default: 
                         document.getElementById('group').disabled=true;
                         document.getElementById('objects').disabled=true;
+                        document.getElementById('prefix').disabled=true;
                 }
             }
         </script>
