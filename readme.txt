@@ -32,7 +32,8 @@ bug list:
 Web Version:
 
 bulk.html :
-todo : need prefix dialog box
+todo : 
+	does network existing add to group ?
 	test with more use cases
 	promote up to prod
 
