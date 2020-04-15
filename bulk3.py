@@ -16,6 +16,17 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 Greg_Dunlap / CelticCow
 """
 
+"""
+convert a CIDR 24 to say 255.255.255.0
+put here because server had old version of this.
+"""
+def calcDottedNetmask(mask):
+    bits = 0
+    for i in range(32-mask,32): 
+        bits |= (1 << i)
+    return "%d.%d.%d.%d" % ((bits & 0xff000000) >> 24, (bits & 0xff0000) >> 16, (bits & 0xff00) >> 8 , (bits & 0xff))
+
+
 def add_host(host, group, ip_addr, prefix, sid):
     if(group == "None"):
         apifunctions.add_a_host(ip_addr, prefix+host, host, sid)
@@ -23,6 +34,11 @@ def add_host(host, group, ip_addr, prefix, sid):
         apifunctions.add_a_host_with_group(ip_addr, prefix+host, host, group,sid)
 
 def add_network(net, mask, group, ip_addr, prefix, sid):
+    if(len(mask) < 3):
+        # we have a cidr block
+        tmp_mask = calcDottedNetmask(int(mask))
+        mask = tmp_mask
+        
     if(group == "None"):
         apifunctions.add_a_network(ip_addr, prefix+net, net, mask, sid)
     else:
