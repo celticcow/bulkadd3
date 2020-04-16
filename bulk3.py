@@ -91,16 +91,11 @@ def main():
 
     #create instance of field storage
     form = cgi.FieldStorage()
-    cma_base = form.getvalue('cma')
+    cma_base = form.getvalue('cma')   #modified for test
     userid = form.getvalue('user')
     passwd = form.getvalue('password')
 
-    #dcma_map = {
-    #    'adm25' : '146.18.96.25',
-    #    'adm26' : '146.18.96.26',
-    #    'adm27' : '146.18.96.27'
-    #}
-
+   
     cma_map = {
         'adm1'  : {'cma' : '192.168.159.151', 'mds' : '192.168.159.150'},
         'adm2'  : {'cma' : '204.135.121.152', 'mds' : '204.135.121.150'},
@@ -124,11 +119,9 @@ def main():
         'adm26' : {'cma' : '146.18.96.26', 'mds' : '146.18.96.16'},
         'adm27' : {'cma' : '146.18.96.27', 'mds' : '146.18.96.16'},
     }
-    #print(cma_map['adm27']['cma'])
-    #print(cma_map['adm27']['mds'])
 
-    mds_ip = cma_map[cma_base]['mds']
-    cma_ip = cma_map[cma_base]['cma']
+    mds_ip = cma_map[cma_base]['mds'] # mod to d
+    cma_ip = cma_map[cma_base]['cma'] # mod to d
 
     ## html header and config data dump
     print ("Content-type:text/html\r\n\r\n")
@@ -141,7 +134,7 @@ def main():
 
     print(cma_ip + "<br>")
 
-    print(cma_map[cma_base])
+    print(cma_map[cma_base]) # mod to d
     print("<br>")
 
     sid = apifunctions.login(userid, passwd, mds_ip, cma_ip)  
@@ -197,7 +190,7 @@ def main():
     publish_result = apifunctions.api_call(mds_ip, "publish", {}, sid)
     print("publish results : " + json.dumps(publish_result))
 
-    time.sleep(5)
+    time.sleep(20)
 
     ### logout
     logout_result = apifunctions.api_call(mds_ip, "logout", {}, sid)
