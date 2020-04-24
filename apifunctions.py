@@ -83,19 +83,20 @@ def name_exist(ip_addr, name, sid):
 """
 see if group already exist as bool ... could do 
 name_exist but this looks better
+commented out lines for debug output
 """
 def group_exist(ip_addr, name, sid):
-    print("temp -- in group_exist")
+    #print("temp -- in group_exist")
     check_name = {"order" : [{"ASC" : "name"}], "in" : ["name", name] }
     chkname = api_call(ip_addr, "show-objects", check_name, sid)
     
-    print("************* Group Exist JDump *************")
-    print(json.dumps(chkname))
-    print("************* ----------------- *************")
+    #print("************* Group Exist JDump *************")
+    #print(json.dumps(chkname))
+    #print("************* ----------------- *************")
 
     if(chkname['total'] == 0):
         #nothing found with this name space
-        print("not a group or does not exist")
+        #print("not a group or does not exist")
         return False
     """
      possible to get a group named "test99" and a host with prefix
@@ -104,11 +105,11 @@ def group_exist(ip_addr, name, sid):
     """
     for i in range(chkname['total']):
         if(chkname['objects'][i]['type'] == "group"):
-            print("This is a group yo")
+            #print("This is a group yo")
             return True
     
     #default return case.  we had name matches but none were groups
-    print("not a group or does not exist")
+    #print("not a group or does not exist")
     return False
 
 """
