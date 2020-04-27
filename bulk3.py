@@ -18,7 +18,7 @@ Greg_Dunlap / CelticCow
 
 """
 convert a CIDR 24 to say 255.255.255.0
-put here because server had old version of this.
+put here because dest server had old version of this.
 """
 def calcDottedNetmask(mask):
     bits = 0
@@ -159,8 +159,12 @@ def main():
     if(group_to_use == None):
         print("no group to add<br>")
     else:
-        apifunctions.add_a_group(mds_ip, group_to_use, sid)
-    
+        #if something with the proposed group name exist.  tell user (IN CAPS) and still create objects
+        if(apifunctions.name_exist(mds_ip, group_to_use, sid) == True):
+            print("CAN'T ADD GROUP <br>OBJECT WITH THIS NAME ALREADY EXIST<br>MOVING FORWARD WITHOUT GROUP<br>")
+            group_to_use = None
+        else:
+            apifunctions.add_a_group(mds_ip, group_to_use, sid)
     #if(group_to_use == "None"):
     #    print("no group to add <br>")
     #else:
