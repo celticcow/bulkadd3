@@ -26,23 +26,53 @@ def calcDottedNetmask(mask):
         bits |= (1 << i)
     return "%d.%d.%d.%d" % ((bits & 0xff000000) >> 24, (bits & 0xff0000) >> 16, (bits & 0xff00) >> 8 , (bits & 0xff))
 
+"""
+prob move to apifunctions at later time
+need to know object type of something where
+name_exist() is true but is it a conflict or not
+"""
+def get_obj_type(ip_addr, name, sid):
+    check_type = {"order" : [{"ASC" : "name"}], "in" : ["name", name] }
+    chktype = apifunctions.api_call(ip_addr, "show-objects", check_type, sid)
+
+    total = chktype['total']
+
+    if(total > 1):
+        return("multiple")
+    elif(total == 0):
+        return("zero")
+    else:
+        return(chktype['objects'][0]['type'])
+
+    
 
 def add_host(host, group, ip_addr, prefix, sid):
-    if(group == "None"):
-        apifunctions.add_a_host(ip_addr, prefix+host, host, sid)
+    print("In function add_host()<br>")
+    
+    if((apifunctions.name_exist(ip_addr, prefix+host, sid) == True) and (get_obj_type(ip_addr, prefix+host, sid) != "host")):
+        print("<br>ISSUE HERE<br>")
+        print("Object in use with same name that is not a host<br>")
     else:
-        apifunctions.add_a_host_with_group(ip_addr, prefix+host, host, group,sid)
+        if(group == "None"):
+            apifunctions.add_a_host(ip_addr, prefix+host, host, sid)
+        else:
+            apifunctions.add_a_host_with_group(ip_addr, prefix+host, host, group,sid)
 
 def add_network(net, mask, group, ip_addr, prefix, sid):
+    print("in function add_network()<br>")
     if(len(mask) < 3):
         # we have a cidr block
         tmp_mask = calcDottedNetmask(int(mask))
         mask = tmp_mask
-        
-    if(group == "None"):
-        apifunctions.add_a_network(ip_addr, prefix+net, net, mask, sid)
+    
+    if((apifunctions.name_exist(ip_addr, prefix+net, sid) == True) and (get_obj_type(ip_addr, prefix+net, sid) != "network")):
+        print("<br>Issue Found")
+        print("Object in use with same name that is not a network<br>")
     else:
-        apifunctions.add_a_network_with_group(ip_addr, prefix+net, net, mask, group, sid)
+        if(group == "None"):
+            apifunctions.add_a_network(ip_addr, prefix+net, net, mask, sid)
+        else:
+            apifunctions.add_a_network_with_group(ip_addr, prefix+net, net, mask, group, sid)
 
 
 """
@@ -161,8 +191,12 @@ def main():
     else:
         #if something with the proposed group name exist.  tell user (IN CAPS) and still create objects
         if(apifunctions.name_exist(mds_ip, group_to_use, sid) == True):
-            print("CAN'T ADD GROUP <br>OBJECT WITH THIS NAME ALREADY EXIST<br>MOVING FORWARD WITHOUT GROUP<br>")
-            group_to_use = None
+            #
+            # issue here .. if it exist but is a group ?
+            #
+            if(get_obj_type(mds_ip, group_to_use,sid) != "group"):
+                print("CAN'T ADD GROUP <br>OBJECT WITH THIS NAME ALREADY EXIST<br>MOVING FORWARD WITHOUT GROUP<br>")
+                group_to_use = None
         else:
             apifunctions.add_a_group(mds_ip, group_to_use, sid)
     #if(group_to_use == "None"):
