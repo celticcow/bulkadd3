@@ -2,7 +2,7 @@ host,1.1.1.1,group11
 host,2.2.2.2,group11
 host,1.1.1.1,group21
 network,1.0.1.0/24,group21
-network,1.0.1.0/24,group99
+network,1.1.0/24,group99
 network,1.0.1.0/24,group91
 host,3.3.3.3,nogroup
 host,3.3.2.3,nogroup
