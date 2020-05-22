@@ -53,6 +53,9 @@ def add_host(host, group, ip_addr, prefix, sid):
         print("<br>ISSUE HERE<br>")
         print("Object in use with same name that is not a host<br>")
     else:
+        #strip off whitespace to be safe
+        host.strip()
+        
         if(group == "None"):
             apifunctions.add_a_host(ip_addr, prefix+host, host, sid)
         else:
@@ -69,6 +72,9 @@ def add_network(net, mask, group, ip_addr, prefix, sid):
         print("<br>Issue Found")
         print("Object in use with same name that is not a network<br>")
     else:
+        #strip off white space to be safe
+        net.strip()
+
         if(group == "None"):
             apifunctions.add_a_network(ip_addr, prefix+net, net, mask, sid)
         else:
