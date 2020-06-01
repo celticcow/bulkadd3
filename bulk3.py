@@ -54,7 +54,7 @@ def add_host(host, group, ip_addr, prefix, sid):
         print("Object in use with same name that is not a host<br>")
     else:
         #strip off whitespace to be safe
-        host.strip()
+        host = host.strip()
         
         if(group == "None"):
             apifunctions.add_a_host(ip_addr, prefix+host, host, sid)
@@ -73,7 +73,7 @@ def add_network(net, mask, group, ip_addr, prefix, sid):
         print("Object in use with same name that is not a network<br>")
     else:
         #strip off white space to be safe
-        net.strip()
+        net = net.strip()
 
         if(group == "None"):
             apifunctions.add_a_network(ip_addr, prefix+net, net, mask, sid)
@@ -185,7 +185,38 @@ def main():
     objects_s1 = str(objects_raw) # odd i know but ya got to
     objects_s2 = objects_s1.split(' ')
     objects_s3 = objects_s2[0].split()
+    objects_s4 = list() #used to get rid of white spaces
 
+    if(debug == 1):
+        #tmp
+        print("raw<br>")
+        print(objects_raw)
+        print("<br>")
+        print("s1<br>")
+        print(objects_s1)
+        print("<br>")
+        print("s2<br>")
+        print(objects_s2)
+        print("<br>")
+        print("s3<br>")
+        print(objects_s3)
+        print("<br><br>")
+
+    #print("-----------------------------------------------------<br>")
+    for ob in objects_s2:
+        #print(ob)
+        #print("---<br>")
+        ob = ob.strip()
+        #print(ob)
+        
+        if(ob == '\n' or ob == '\r' or ob == '\r\n'):
+            print("dropping char returns<br>")
+        elif(ob == ''):
+            print("removing spaces<br>")
+        else:
+            objects_s4.append(ob)
+        #print("+++<br>")
+    #print("-----------------------------------------------------<br>")
     #if(debug == 1):
     #    print("Group to add to<br>")
     #    print("-" + group_to_use + "-")
@@ -196,10 +227,13 @@ def main():
         print("no group to add<br>")
     else:
         #if something with the proposed group name exist.  tell user (IN CAPS) and still create objects
+        group_to_use = group_to_use.strip()
+
         if(apifunctions.name_exist(mds_ip, group_to_use, sid) == True):
             #
             # issue here .. if it exist but is a group ?
             #
+            
             if(get_obj_type(mds_ip, group_to_use,sid) != "group"):
                 print("CAN'T ADD GROUP <br>OBJECT WITH THIS NAME ALREADY EXIST<br>MOVING FORWARD WITHOUT GROUP<br>")
                 group_to_use = None
@@ -212,7 +246,7 @@ def main():
 
     print("<br>")
     print("Object Listing<br>")
-    for obj in objects_s3:
+    for obj in objects_s4:  #was s3
         print(obj)
         print("<br>")
         obj_type = what_am_i(obj)
