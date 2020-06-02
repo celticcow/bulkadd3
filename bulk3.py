@@ -202,12 +202,14 @@ def main():
         print(objects_s3)
         print("<br><br>")
 
-    #print("-----------------------------------------------------<br>")
+    ### 06.02.2020   s4 does not work
+    """
+    print("-----------------------------------------------------<br>")
     for ob in objects_s2:
-        #print(ob)
-        #print("---<br>")
+        print(ob)
+        print("---<br>")
         ob = ob.strip()
-        #print(ob)
+        print(ob)
         
         if(ob == '\n' or ob == '\r' or ob == '\r\n'):
             print("dropping char returns<br>")
@@ -215,8 +217,9 @@ def main():
             print("removing spaces<br>")
         else:
             objects_s4.append(ob)
-        #print("+++<br>")
-    #print("-----------------------------------------------------<br>")
+        print("+++<br>")
+    print("-----------------------------------------------------<br>")
+    """
     #if(debug == 1):
     #    print("Group to add to<br>")
     #    print("-" + group_to_use + "-")
@@ -246,7 +249,7 @@ def main():
 
     print("<br>")
     print("Object Listing<br>")
-    for obj in objects_s4:  #was s3
+    for obj in objects_s3: 
         print(obj)
         print("<br>")
         obj_type = what_am_i(obj)
