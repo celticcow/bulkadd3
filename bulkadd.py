@@ -7,6 +7,7 @@ import csv
 import time
 import getpass
 import ipaddress
+import argparse
 import apifunctions
 
 #remove the InsecureRequestWarning messages
@@ -80,9 +81,21 @@ def main():
     
     debug = 1
 
-    inputfile = sys.argv[1]
+    #inputfile = sys.argv[1]
     
     print("CheckPoint BulkAdd3  version 0.85")
+
+    parser = argparse.ArgumentParser(description='Bulk Add Script')
+
+    parser.add_argument("-f", required=True, help="name of csv file")
+    parser.add_argument("-y", required=False, help="yes to auto create groups")
+
+    args = parser.parse_args()
+
+    inputfile = args.f 
+
+    if(debug == 1):
+        print(args.y)
 
     #before we login to the mds ... make sure input file is good
     if(csvisgood(inputfile) == False):
@@ -123,15 +136,23 @@ def main():
                 # add row_data group as a member to row_grp
                 movefwd = 1
                 if(apifunctions.group_exist(ip_addr, row_data, sid) == False):
-                    print("Source Group does not exist. Do you want to create (yes/no). If you say No this line will be slipped ", row_data)
-                    toadd = input("(yes/no) : ")
+                    if(args.y == 'y' or args.y == 'Y'):
+                        toadd = "yes"
+                    else:
+                        print("Source Group does not exist. Do you want to create (yes/no). If you say No this line will be slipped ", row_data)
+                        toadd = input("(yes/no) : ")
+
                     if(toadd == "yes"):
                         apifunctions.add_a_group(ip_addr, row_data, sid)
                     else:
                         movefwd = 0
                 if(apifunctions.group_exist(ip_addr, row_grp, sid) == False):
-                    print("Source Group does not exist. Do you want to create (yes/no). If you say No this line will be slipped ", row_grp)
-                    toadd = input("(yes/no) : ")
+                    if(args.y == 'y' or args.y == 'Y'):
+                        toadd = "yes"
+                    else:
+                        print("Source Group does not exist. Do you want to create (yes/no). If you say No this line will be slipped ", row_grp)
+                        toadd = input("(yes/no) : ")
+
                     if(toadd == "yes"):
                         apifunctions.add_a_group(ip_addr, row_grp, sid)
                     else:
@@ -152,8 +173,12 @@ def main():
                 else:
                     ## we doing some group stuff
                     if(apifunctions.group_exist(ip_addr, row_grp, sid) == False):
-                        print("Group in row does not exist do you want to create (yes/no) if you say no this line will be skipped ", row_grp)
-                        toadd = input("(yes / no) : ")
+                        if(args.y == 'y' or args.y == 'Y'):
+                            toadd = "yes"
+                        else:
+                            print("Group in row does not exist do you want to create (yes/no) if you say no this line will be skipped ", row_grp)
+                            toadd = input("(yes / no) : ")
+                            
                         if(toadd == "yes"):
                             apifunctions.add_a_group(ip_addr, row_grp, sid)
                         else:
