@@ -28,26 +28,31 @@ def csvisgood(ifile):
         for row in csvreader:
             row_type = row[0]
             row_data = row[1]
-            row_grp  = row[2]            
+            row_grp  = row[2]
+            
+            if(row_type == "hostname"):
+                row_name = row[3]
+            else:
+                row_name = ""            
 
             #if(debug == 1):
                 #print(row_type, row_data, row_grp)
             try:
-                if(rowisclean(row_type, row_data, row_grp)):
+                if(rowisclean(row_type, row_data, row_grp, row_name)):
                     pass
                     #print("ROW IS CLEAN")
                 else:
                     print("ROW IS INVALID")
-                    print(row_type, row_data, row_grp)
+                    print(row_type, row_data, row_grp, row_name)
                     return False
             except:
                 print("ROW IS INVALID")
-                print(row_type, row_data, row_grp)
+                print(row_type, row_data, row_grp, row_name)
                 return False
     return True
 
 
-def rowisclean(ctype, cdata, cgrp):
+def rowisclean(ctype, cdata, cgrp, cname=''):
     if(ctype == "host"):
         if(ipaddress.ip_address(cdata)):
             pass
@@ -72,6 +77,12 @@ def rowisclean(ctype, cdata, cgrp):
             return False
     elif(ctype == "group"):
         pass
+    elif(ctype == "hostname"):
+        if(ipaddress.ip_address(cdata)):
+            pass
+            #print("valid ip")
+        else:
+            return False
     else:
         print("things have gone sideways on your csv")
         return False
@@ -120,6 +131,11 @@ def main():
             row_type = row[0]
             row_data = row[1]
             row_grp  = row[2]
+
+            if(row_type == "hostname"):
+                row_name = row[3]
+            else:
+                row_name = ""   
 
             addobj = 1
 
@@ -170,6 +186,8 @@ def main():
                         apifunctions.add_a_network(ip_addr, prefix+tmp[0], tmp[0], apifunctions.calcDottedNetmask(int(tmp[1])), sid)
                     if(row_type == "host"):
                         apifunctions.add_a_host(ip_addr, prefix+row_data, row_data, sid)
+                    if(row_type == "hostname"):
+                        apifunctions.add_a_host(ip_addr, row_name, row_data, sid)
                 else:
                     ## we doing some group stuff
                     if(apifunctions.group_exist(ip_addr, row_grp, sid) == False):
@@ -178,7 +196,7 @@ def main():
                         else:
                             print("Group in row does not exist do you want to create (yes/no) if you say no this line will be skipped ", row_grp)
                             toadd = input("(yes / no) : ")
-                            
+
                         if(toadd == "yes"):
                             apifunctions.add_a_group(ip_addr, row_grp, sid)
                         else:
@@ -191,6 +209,8 @@ def main():
                             apifunctions.add_a_network_with_group(ip_addr, prefix+tmp[0], tmp[0], apifunctions.calcDottedNetmask(int(tmp[1])), row_grp, sid)
                         if(row_type == "host"):
                             apifunctions.add_a_host_with_group(ip_addr, prefix+row_data, row_data, row_grp, sid)
+                        if(row_type == "hostname"):
+                            apifunctions.add_a_host_with_group(ip_addr, row_name, row_data, row_grp, sid)
                 #end if(grp = nogroup)
             #end else --- network object
         #end for row in csvreader
