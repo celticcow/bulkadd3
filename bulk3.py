@@ -247,6 +247,9 @@ def main():
     #else:
     #    apifunctions.add_a_group(mds_ip, group_to_use, sid)
 
+    ## iterator for doing changes every 20 objects
+    iterator = 0
+
     print("<br>")
     print("Object Listing<br>")
     for obj in objects_s3: 
@@ -264,6 +267,15 @@ def main():
             parts = obj.split('/')
             add_network(parts[0], parts[1], group_to_use, mds_ip, prefix, sid) 
 
+        iterator = iterator + 1
+
+        if(iterator == 20):
+            time.sleep(5)
+            tmp_publish_result = apifunctions.api_call(mds_ip, "publish", {}, sid)
+            print("peridoic publish result : " + json.dumps(tmp_publish_result))
+            time.sleep(5)
+            iterator = 0
+            
         #print(objects_raw)
 
     print("<br>Start of Publish ... zzzzzz")
